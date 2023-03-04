@@ -39,16 +39,27 @@ def create_fleet(ai_settings, screen,ship, aliens):
 		for alien_number in range(number_aliens_x):
 			create_alien(ai_settings, screen, aliens, alien_number, row_number)
 
-def update_aliens(aliens):
+def update_aliens(aliens,ai_settings):
 	"""Update the positions of all aliens in the fleet."""
+	"""
+	Check if the fleet is at an edge,
+		and then update the positions of all aliens in the fleet.
+	"""
+	check_fleet_edges(ai_settings,aliens)
 	aliens.update()
 
+def check_fleet_edges(ai_settings, aliens):
+	"""Respond appropriately if any aliens have reached an edges."""
+	for alien in aliens.sprites():
+		if alien.check_edges():
+			change_fleet_direction(ai_settings, aliens)
+			break
 
-
-		
-		
-		
-
+def change_fleet_direction(ai_settings, aliens):
+	"""Drop the entire fleet and change the fleet's direction."""
+	for alien in aliens.sprites():
+		alien.rect.y += ai_settings.fleet_drop_speed
+	ai_settings.fleet_direction *= -1
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
 	"""Respond to keypresses"""
@@ -68,6 +79,27 @@ def fire_bullet(ai_settings, screen, ship, bullets):
 	if len(bullets) < ai_settings.bullets_allowed:
 		new_bullet = Bullet(ai_settings, screen, ship)
 		bullets.add(new_bullet)
+
+def update_bullets(ai_settings, screen, ship, aliens, bullets):
+	"""Update position of bullets and get rid of old bullets."""
+	# Update bullet positions.
+	bullets.update()
+	# Check for any bullets that have hit aliens.
+	# If so, get rid of the bullet and the alien.
+	collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+	if len(aliens) == 0:
+		#Destroy existing bullets and create new fleet.
+		bullets.empty()
+		create_fleet(ai_settings, screen, ship, aliens)
+
+	# Get rid of bullets that have disappeared.
+	for bullet in bullets.copy():
+		if bullet.rect.bottom <= 0:
+			bullets.remove(bullet)
+
+	# Make the most recently drawn screen visible.
+	pygame.display.flip()
 
 def check_keyup_events(event, ship):
 	if event.key == pygame.K_RIGHT:
@@ -99,15 +131,3 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
 	for bullet in bullets.sprites():
 		bullet.draw_bullet()
 
-def update_bullets(bullets):
-	"""Update position of bullets and get rid of old bullets."""
-	# Update bullet positions.
-	bullets.update()
-
-	# Get rid of bullets that have disappeared.
-	for bullet in bullets.copy():
-		if bullet.rect.bottom <= 0:
-			bullets.remove(bullet)
-
-	# Make the most recently drawn screen visible.
-	pygame.display.flip()
