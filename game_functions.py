@@ -7,22 +7,24 @@ from alien import Alien
 
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
 	"""Respond to ship being hit by aliens."""
-	if stats.ships_left > 0:
-		# Decrement ships_left.
-		stats.ships_left -= 1
-		# Empty the list of aliens and bullets.
-		aliens.empty()
-		bullets.empty()
-		#Create a new fleet and center the ship.
-		create_fleet(ai_settings, screen, ship, aliens)
-		ship.center_ship()
+	# Decrement ships_left.
+	stats.ships_left -= 1
 
-		# Pause.
-		sleep(0.5)
+	# Empty the list of aliens and bullets.
+	aliens.empty()
+	bullets.empty()
 
-	else:
-		stats.game_active = False
+	#Create a new fleet and center the ship.
+	create_fleet(ai_settings, screen, ship, aliens)
+	ship.center_ship()
 
+<<<<<<< HEAD
+=======
+	# Pause.
+	sleep(0.5)
+
+
+>>>>>>> parent of 9f604d1 (Game freezes when all of player's ships have been destroyed.)
 def get_number_aliens_x(ai_settings, alien_width):
 	"""Determine the number of aliens that fit in a row."""
 	available_space_x = ai_settings.screen_width - 2 * alien_width

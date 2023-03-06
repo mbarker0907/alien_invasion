@@ -34,6 +34,7 @@ def run_game():
 
 	# Start the main loop for the game.
 	while True:
+<<<<<<< HEAD
 		gf.check_events(ai_settings, stats, screen, ship, bullets, play_button)
 
 		if stats.game_active:
@@ -42,6 +43,14 @@ def run_game():
 			gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
 			gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
 		gf.update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button)
+=======
+		gf.check_events(ai_settings, screen, ship, bullets)
+		ship.update()  
+		gf.update_screen(ai_settings, screen, ship, aliens, bullets)
+		gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
+		gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
+		gf.update_screen(ai_settings, screen, ship, aliens, bullets)
+>>>>>>> parent of 9f604d1 (Game freezes when all of player's ships have been destroyed.)
 
 
 
