@@ -22,6 +22,7 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
 
 	else:
 		stats.game_active = False
+		pygame.mouse.set_visible(True)
 
 def get_number_aliens_x(ai_settings, alien_width):
 	"""Determine the number of aliens that fit in a row."""
@@ -151,7 +152,12 @@ def check_keyup_events(event, ship):
 
 def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
 		"""Start a new game when the player clicks Play."""
-		if play_button.rect.collidepoint(mouse_x, mouse_y):
+		button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+		if button_clicked and not stats.game_active:
+		
+			# Hide mouse cursor.
+			pygame. mouse.set_visible(False)
+		
 			# Rest the game statistics.
 			stats.reset_stats()
 			stats.game_active = True
@@ -176,9 +182,6 @@ def check_events(ai_settings, stats, play_button, screen, ship, aliens, bullets)
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_x, mouse_y = pygame.mouse.get_pos()
 			check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
-
-
-				
 
 def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
 	"""Update images on the screen and flip to the new screen."""
